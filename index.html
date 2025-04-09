@@ -108,6 +108,28 @@
         .nav-item:hover svg {
             color: rgba(255, 255, 255, 0.7);
         }
+
+        /* 尝试隐藏CrazyGames的蓝色按钮 */
+        .game-iframe-wrapper {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        #game-iframe {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .button-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 80px;
+            background: #11121c;
+            z-index: 5;
+            pointer-events: none;
+        }
     </style>
     <script>
         window.addEventListener('DOMContentLoaded', function() {
@@ -118,6 +140,17 @@
             // 检测iframe加载
             gameIframe.addEventListener('load', function() {
                 iframeLoaded = true;
+                
+                // 创建并显示覆盖层来隐藏蓝色按钮
+                setTimeout(function() {
+                    const wrapper = document.querySelector('.game-iframe-wrapper');
+                    if (wrapper) {
+                        const overlay = document.createElement('div');
+                        overlay.className = 'button-overlay';
+                        wrapper.appendChild(overlay);
+                        overlay.style.display = 'block';
+                    }
+                }, 1000);
             });
             
             // 10秒后检查是否加载成功
@@ -350,7 +383,7 @@
                         </div>
 
                         <div class="game-card overflow-hidden">
-                            <div class="aspect-[16/9] w-full h-[500px] bg-black relative">
+                            <div class="aspect-[16/9] w-full h-[500px] bg-black relative game-iframe-wrapper">
                                 <iframe id="game-iframe" src="https://www.crazygames.com/embed/ragdoll-archers" style="width: 100%; height: 100%;" frameborder="0" allow="gamepad *; fullscreen *; autoplay *; clipboard-write *; web-share *; cross-origin-isolated *" allowfullscreen></iframe>
                                 
                                 <!-- 游戏加载失败时显示的后备内容 -->
